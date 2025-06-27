@@ -9,9 +9,34 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+
+interface FirstPageProps {
+  onClick?: () => void;
+}
+function FirstPage({onClick}: FirstPageProps) {
+  return (
+    <div>
+      <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
+        <button 
+          onClick={() => {
+            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
+          }}
+          style={{ padding: "10px 20px", fontSize: "16px" }}
+        >
+          Start beep
+        </button>
+      </div>
+      <SimpleAudio playlist={playlist} />
+    </div>
+  );
+}
+
+
+
+
 export default function Home() {
   // const [currentPlaylist, setCurrentPlaylist] = useState(-1);
-  
+  const [currentStep, setCurrentStep] = useState(0);
   const testPlaylistOfList: string[][] = [
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
@@ -21,13 +46,9 @@ export default function Home() {
   return (
     <div>
       <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
-        <h2>GuideAudio Test</h2>
-        <p>Current Playlist: {currentPlaylist}</p>
-        <p>Tracks in playlist: {testPlaylistOfList[currentPlaylist]?.length || 0}</p>
-        <p>Audio will play automatically with 3 second intervals</p>
         <button 
           onClick={() => {
-            setCurrentPlaylist(0);
+            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
           }}
           style={{ padding: "10px 20px", fontSize: "16px" }}
         >
