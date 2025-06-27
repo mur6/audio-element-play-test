@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SimpleAudio } from "../components/Audio";
 
 export function meta({}: Route.MetaArgs) {
@@ -31,8 +31,17 @@ function FirstPage({ onClick }: FirstPageProps) {
 
 interface SecondPageProps {
   playlist: string[];
+  onComplete?: () => void;
 }
-function SecondPage({ playlist }: SecondPageProps) {
+function SecondPage({ playlist, onComplete }: SecondPageProps) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onComplete?.();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
   return (
     <div>
       <div
@@ -41,6 +50,19 @@ function SecondPage({ playlist }: SecondPageProps) {
         <h2>Second Page</h2>
         <p>ビープを再生します。</p>
         <SimpleAudio playlist={playlist} />
+      </div>
+    </div>
+  );
+}
+
+function ThirdPage() {
+  return (
+    <div>
+      <div
+        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
+      >
+        <h2>Third Page</h2>
+        <p>5秒後に自動的に切り替わりました。</p>
       </div>
     </div>
   );
@@ -59,8 +81,10 @@ export default function Home() {
     <>
       {currentStep === 0 ? (
         <FirstPage onClick={() => setCurrentStep(1)} />
+      ) : currentStep === 1 ? (
+        <SecondPage playlist={playlist} onComplete={() => setCurrentStep(2)} />
       ) : (
-        <SecondPage playlist={playlist} />
+        <ThirdPage />
       )}
     </>
   );
