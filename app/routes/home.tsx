@@ -42,7 +42,7 @@ function SecondPage({playlist}: SecondPageProps) {
       </div>
     </div>
   );
-
+}
 
 
 export default function Home() {
