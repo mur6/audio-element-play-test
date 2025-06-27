@@ -1,6 +1,5 @@
 import type { Route } from "./+types/home";
 import { useState } from "react";
-import { Welcome } from "../welcome/welcome";
 import { GuideAudio } from "../components/GuideAudio";
 
 export function meta({}: Route.MetaArgs) {
