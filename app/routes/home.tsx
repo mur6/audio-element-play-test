@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { SimpleAudio } from "../components/Audio";
 
 export function meta({}: Route.MetaArgs) {
@@ -31,17 +31,8 @@ function FirstPage({ onClick }: FirstPageProps) {
 
 interface SecondPageProps {
   playlist: string[];
-  onComplete?: () => void;
 }
-function SecondPage({ playlist, onComplete }: SecondPageProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onComplete?.();
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [onComplete]);
-
+function SecondPage({ playlist }: SecondPageProps) {
   return (
     <div>
       <div
@@ -55,7 +46,10 @@ function SecondPage({ playlist, onComplete }: SecondPageProps) {
   );
 }
 
-function ThirdPage() {
+interface ThirdPageProps {
+  playlist: string[];
+}
+function ThirdPage({ playlist }: ThirdPageProps) {
   return (
     <div>
       <div
@@ -63,6 +57,7 @@ function ThirdPage() {
       >
         <h2>Third Page</h2>
         <p>5秒後に自動的に切り替わりました。</p>
+        <SimpleAudio playlist={playlist} />
       </div>
     </div>
   );
@@ -76,15 +71,25 @@ export default function Home() {
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
   ];
   const playlist = testPlaylistOfList[0];
+  const playlist2 = testPlaylistOfList[1];
 
+  useEffect(() => {
+    if (currentStep === 1) {
+      const timer = setTimeout(() => {
+        setCurrentStep(2);
+      }, 5000); // 5秒後に自動的に切り替え
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
   return (
     <>
       {currentStep === 0 ? (
         <FirstPage onClick={() => setCurrentStep(1)} />
       ) : currentStep === 1 ? (
-        <SecondPage playlist={playlist} onComplete={() => setCurrentStep(2)} />
+        <SecondPage playlist={playlist}/>
       ) : (
-        <ThirdPage />
+        <ThirdPage playlist={playlist2} />
       )}
     </>
   );
