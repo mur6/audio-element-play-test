@@ -20,7 +20,6 @@ export default function Home() {
 
   return (
     <div>
-      <Welcome />
       <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
         <h2>GuideAudio Test</h2>
         <p>Current Playlist: {currentPlaylist}</p>
