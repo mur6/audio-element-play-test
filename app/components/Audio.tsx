@@ -4,7 +4,7 @@ interface PlaylistProps {
   playlist: string[]
 }
 
-export default function Audio({ playlist }: PlaylistProps) {
+export function SimpleAudio({ playlist }: PlaylistProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 

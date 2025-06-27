@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import { useState } from "react";
-import { GuideAudio } from "../components/GuideAudio";
+import { SimpleAudio } from "../components/Audio";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,12 +10,13 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const [currentPlaylist, setCurrentPlaylist] = useState(-1);
+  // const [currentPlaylist, setCurrentPlaylist] = useState(-1);
   
   const testPlaylistOfList: string[][] = [
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
   ];
+  const playlist = testPlaylistOfList[0];
 
   return (
     <div>
@@ -33,10 +34,7 @@ export default function Home() {
           Start beep
         </button>
       </div>
-      <GuideAudio 
-        playlistOfList={testPlaylistOfList}
-        currentPlaylist={currentPlaylist}
-      />
+      <SimpleAudio playlist={playlist} />
     </div>
   );
 }
