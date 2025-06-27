@@ -10,11 +10,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const [currentPlaylist, setCurrentPlaylist] = useState(0);
+  const [currentPlaylist, setCurrentPlaylist] = useState(-1);
   
   const testPlaylistOfList: string[][] = [
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
-    ["/audio/low_beep.mp3", "/audio/high_beep.mp3", "/audio/high_beep.mp3"]
+    ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
   ];
 
   return (
@@ -25,16 +25,12 @@ export default function Home() {
         <p>Tracks in playlist: {testPlaylistOfList[currentPlaylist]?.length || 0}</p>
         <p>Audio will play automatically with 3 second intervals</p>
         <button 
-          onClick={() => setCurrentPlaylist(0)}
-          style={{ margin: "5px", padding: "10px" }}
+          onClick={() => {
+            setCurrentPlaylist(0);
+          }}
+          style={{ padding: "10px 20px", fontSize: "16px" }}
         >
-          Playlist 0 (High → Low)
-        </button>
-        <button 
-          onClick={() => setCurrentPlaylist(1)}
-          style={{ margin: "5px", padding: "10px" }}
-        >
-          Playlist 1 (Low → High → High)
+          Start beep
         </button>
       </div>
       <GuideAudio 
