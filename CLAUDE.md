@@ -3,8 +3,12 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
+オーディオ再生用の"GuideAudio"という、不可視のReactコンポーネントをtypescript/tsxで実装してください。
 
-This is a React Router v7 application with Vite as the build tool. The project uses TypeScript, TailwindCSS for styling, and supports server-side rendering (SSR) by default.
+- HTMLAudioをラップしてください。
+- 再生するPlaylistOfListを、引数にとるようにしてください。型はstring[][]です。
+- Safariの、音の自動再生の制限を回避するため、音を鳴らしていない間は無音のsoundを再生してください。
+- propsで、鳴らすPlaylistOfListの番号を、指定できるようにしてください。
 
 ## Common Commands
 
