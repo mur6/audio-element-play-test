@@ -1,7 +1,6 @@
 import type { Route } from "./+types/home";
 import { useState } from "react";
 import { SimpleAudio } from "../components/Audio";
-import { on } from "events";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,15 +9,16 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-
 interface FirstPageProps {
   onClick?: () => void;
 }
-function FirstPage({onClick}: FirstPageProps) {
+function FirstPage({ onClick }: FirstPageProps) {
   return (
     <div>
-      <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
-        <button 
+      <div
+        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
+      >
+        <button
           onClick={onClick}
           style={{ padding: "10px 20px", fontSize: "16px" }}
         >
@@ -32,10 +32,12 @@ function FirstPage({onClick}: FirstPageProps) {
 interface SecondPageProps {
   playlist: string[];
 }
-function SecondPage({playlist}: SecondPageProps) {
+function SecondPage({ playlist }: SecondPageProps) {
   return (
     <div>
-      <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
+      <div
+        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
+      >
         <h2>Second Page</h2>
         <p>ビープを再生します。</p>
         <SimpleAudio playlist={playlist} />
@@ -43,7 +45,6 @@ function SecondPage({playlist}: SecondPageProps) {
     </div>
   );
 }
-
 
 export default function Home() {
   // const [currentPlaylist, setCurrentPlaylist] = useState(-1);
@@ -61,6 +62,6 @@ export default function Home() {
       ) : (
         <SecondPage playlist={playlist} />
       )}
-      </>
+    </>
   );
 }
