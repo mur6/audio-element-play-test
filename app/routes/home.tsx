@@ -1,6 +1,7 @@
 import type { Route } from "./+types/home";
 import { useState } from "react";
 import { SimpleAudio } from "../components/Audio";
+import { on } from "events";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,36 +19,27 @@ function FirstPage({onClick}: FirstPageProps) {
     <div>
       <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
         <button 
-          onClick={() => {
-            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
-          }}
+          onClick={onClick}
           style={{ padding: "10px 20px", fontSize: "16px" }}
         >
           Start beep
         </button>
       </div>
-      <SimpleAudio playlist={playlist} />
     </div>
   );
 }
 
 interface SecondPageProps {
-  onClick?: () => void;
+  playlist: string[];
 }
-function SecondPage({onClick}: SecondPageProps) {
+function SecondPage({playlist}: SecondPageProps) {
   return (
     <div>
       <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
-        <button 
-          onClick={() => {
-            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
-          }}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
-          Next beep
-        </button>
+        <h2>Second Page</h2>
+        <p>ビープを再生します。</p>
+        <SimpleAudio playlist={playlist} />
       </div>
-      <SimpleAudio playlist={playlist} />
     </div>
   );
 
@@ -63,18 +55,12 @@ export default function Home() {
   const playlist = testPlaylistOfList[0];
 
   return (
-    // <div>
-    //   <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
-    //     <button 
-    //       onClick={() => {
-    //         setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
-    //       }}
-    //       style={{ padding: "10px 20px", fontSize: "16px" }}
-    //     >
-    //       Start beep
-    //     </button>
-    //   </div>
-    //   <SimpleAudio playlist={playlist} />
-    // </div>
+    <>
+      {currentStep === 0 ? (
+        <FirstPage onClick={() => setCurrentStep(1)} />
+      ) : (
+        <SecondPage playlist={playlist} />
+      )}
+      </>
   );
 }
