@@ -40,7 +40,6 @@ export default function Home() {
       <GuideAudio 
         playlistOfList={testPlaylistOfList}
         currentPlaylist={currentPlaylist}
-        intervalSeconds={3}
       />
     </div>
   );
