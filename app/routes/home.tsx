@@ -31,6 +31,25 @@ function FirstPage({onClick}: FirstPageProps) {
   );
 }
 
+interface SecondPageProps {
+  onClick?: () => void;
+}
+function SecondPage({onClick}: SecondPageProps) {
+  return (
+    <div>
+      <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
+        <button 
+          onClick={() => {
+            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
+          }}
+          style={{ padding: "10px 20px", fontSize: "16px" }}
+        >
+          Next beep
+        </button>
+      </div>
+      <SimpleAudio playlist={playlist} />
+    </div>
+  );
 
 
 
@@ -44,18 +63,18 @@ export default function Home() {
   const playlist = testPlaylistOfList[0];
 
   return (
-    <div>
-      <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
-        <button 
-          onClick={() => {
-            setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
-          }}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
-          Start beep
-        </button>
-      </div>
-      <SimpleAudio playlist={playlist} />
-    </div>
+    // <div>
+    //   <div style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}>
+    //     <button 
+    //       onClick={() => {
+    //         setCurrentStep((prev) => (prev + 1) % testPlaylistOfList.length);
+    //       }}
+    //       style={{ padding: "10px 20px", fontSize: "16px" }}
+    //     >
+    //       Start beep
+    //     </button>
+    //   </div>
+    //   <SimpleAudio playlist={playlist} />
+    // </div>
   );
 }
