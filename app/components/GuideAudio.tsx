@@ -3,14 +3,17 @@ import { useEffect, useRef, useState } from 'react';
 interface GuideAudioProps {
   playlistOfList: string[][];
   currentPlaylist?: number;
+  intervalSeconds?: number;
 }
 
 export const GuideAudio: React.FC<GuideAudioProps> = ({
   playlistOfList,
-  currentPlaylist = 0
+  currentPlaylist = 0,
+  intervalSeconds = 3
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const silentAudioRef = useRef<HTMLAudioElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -73,8 +76,24 @@ export const GuideAudio: React.FC<GuideAudioProps> = ({
   useEffect(() => {
     if (currentPlaylistTracks.length > 0 && isInitialized) {
       playCurrentTrack();
+      
+      if (intervalRef.current) {
+        clearTimeout(intervalRef.current);
+      }
+      
+      if (currentTrackIndex < currentPlaylistTracks.length - 1) {
+        intervalRef.current = setTimeout(() => {
+          setCurrentTrackIndex(prev => prev + 1);
+        }, intervalSeconds * 1000);
+      }
     }
-  }, [currentTrackIndex, isInitialized]);
+    
+    return () => {
+      if (intervalRef.current) {
+        clearTimeout(intervalRef.current);
+      }
+    };
+  }, [currentTrackIndex, isInitialized, intervalSeconds, currentPlaylistTracks.length]);
 
   return (
     <>
