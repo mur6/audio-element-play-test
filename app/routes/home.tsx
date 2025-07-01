@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useRef } from "react";
 import { SimpleAudio } from "../components/Audio";
 
 export function meta({}: Route.MetaArgs) {
@@ -66,6 +66,7 @@ function ThirdPage({ playlist }: ThirdPageProps) {
 export default function Home() {
   // const [currentPlaylist, setCurrentPlaylist] = useState(-1);
   const [currentStep, setCurrentStep] = useState(0);
+  const silentAudioRef = useRef<HTMLAudioElement | null>(null);
   const testPlaylistOfList: string[][] = [
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
     ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
@@ -75,15 +76,41 @@ export default function Home() {
 
   useEffect(() => {
     if (currentStep === 1) {
+      // 無音のmp3を再生開始
+      if (silentAudioRef.current) {
+        silentAudioRef.current.currentTime = 0;
+        silentAudioRef.current.play();
+      }
+
       const timer = setTimeout(() => {
+        // 無音のmp3を停止
+        if (silentAudioRef.current) {
+          silentAudioRef.current.pause();
+          silentAudioRef.current.currentTime = 0;
+        }
         setCurrentStep(2);
       }, 5000); // 5秒後に自動的に切り替え
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        // クリーンアップ時も無音のmp3を停止
+        if (silentAudioRef.current) {
+          silentAudioRef.current.pause();
+          silentAudioRef.current.currentTime = 0;
+        }
+      };
     }
   }, [currentStep]);
   return (
     <>
+      {/* 無音のmp3ファイル用の隠しaudio要素 */}
+      <audio
+        ref={silentAudioRef}
+        src="/audio/silent.mp3"
+        loop
+        style={{ display: 'none' }}
+      />
+      
       {currentStep === 0 ? (
         <FirstPage onClick={() => setCurrentStep(1)} />
       ) : currentStep === 1 ? (
