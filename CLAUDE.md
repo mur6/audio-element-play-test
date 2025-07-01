@@ -3,12 +3,9 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-オーディオ再生用の"GuideAudio"という、不可視のReactコンポーネントをtypescript/tsxで実装してください。
-
-- HTMLAudioをラップしてください。
-- 再生するPlaylistOfListを、引数にとるようにしてください。型はstring[][]です。
-- Safariの、音の自動再生の制限を回避するため、音を鳴らしていない間は無音のsoundを再生してください。
-- propsで、鳴らすPlaylistOfListの番号を、指定できるようにしてください。
+iOS SafariでのHTMLAudioの挙動確認のためのプロジェクトです。HTMLAudioを、reactコンポーネントでラップしています。
+iOS Safariには、音の自動再生ポリシー上、制限があります。
+このプロジェクトでは、音を鳴らしていない間に無音のmp3を再生することで、この制限を回避できるかを試しています。
 
 ## Common Commands
 
