@@ -215,6 +215,7 @@ describe('SimpleAudio Component', () => {
     // 新しいオーディオが再生されることを確認
     await vi.waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('/audio/test2.mp3')
+      expect(mockAudioContext.createBufferSource).toHaveBeenCalledTimes(2)
     })
   })
 })
