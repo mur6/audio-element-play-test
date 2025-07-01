@@ -40,7 +40,6 @@ function SecondPage({ playlist }: SecondPageProps) {
       >
         <h2>Second Page</h2>
         <p>ビープを再生します。</p>
-        <SimpleAudio playlist={playlist} />
       </div>
     </div>
   );
@@ -57,7 +56,6 @@ function ThirdPage({ playlist }: ThirdPageProps) {
       >
         <h2>Third Page</h2>
         <p>5秒後に自動的に切り替わりました。</p>
-        <SimpleAudio playlist={playlist} />
       </div>
     </div>
   );
