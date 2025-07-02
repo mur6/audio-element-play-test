@@ -23,7 +23,7 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
       setCurrentPlaylist(playlist);
       setCurrentTrackIndex(0);
       setIsPlayingPlaylist(true);
-    }
+    },
   }));
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
       }
     };
 
-    audio.addEventListener('ended', handleEnded);
-    return () => audio.removeEventListener('ended', handleEnded);
+    audio.addEventListener("ended", handleEnded);
+    return () => audio.removeEventListener("ended", handleEnded);
   }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
 
   useEffect(() => {
@@ -55,22 +55,14 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
       audio.src = currentPlaylist[currentTrackIndex];
     } else {
       audio.src = SILENT_SOUND_PATH;
+      audio.loop = true;
     }
-    
+
     audio.load();
     audio.play().catch(console.error);
   }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.src = SILENT_SOUND_PATH;
-    audio.loop = true;
-    audio.play().catch(console.error);
-  }, []);
-
   return (
-      <audio ref={audioRef} autoPlay preload="auto" style={{ display: 'none' }} />
+    <audio ref={audioRef} autoPlay preload="auto" style={{ display: "none" }} />
   );
 }

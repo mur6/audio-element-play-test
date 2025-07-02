@@ -41,15 +41,15 @@ export default function Home() {
 
   // 一度再生が完了してから、5秒後に、再度ビープを再生
   useEffect(() => {
-      const timer = setTimeout(() => {
-        
-        if (audioRef.current) {
-          audioRef.current.play(playlist);
-        }
-      }, milliseconds);
+    if (played) return;
+    const timer = setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play(playlist);
+      }
+    }, milliseconds);
 
-      return () => clearTimeout(timer);
-    }, []);
+    return () => clearTimeout(timer);
+  }, [played]);
 
   return (
     <>
