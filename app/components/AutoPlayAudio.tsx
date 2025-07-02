@@ -45,7 +45,7 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
 
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
-  }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
+  }, [isPlayingPlaylist, currentPlaylist]);
 
   useEffect(() => {
     const audio = audioRef.current;
