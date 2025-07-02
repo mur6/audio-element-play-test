@@ -31,7 +31,7 @@ export function meta({}: Route.MetaArgs) {
 const playlist = ["/audio/low_beep.mp3", "/audio/high_beep.mp3"];
 
 export default function Home() {
-  const milliseconds = 15000; // 5 seconds
+  const milliseconds = 15000;
   const [played, setPlayed] = useState(false);
   const audioRef = useRef<{ play: (playlist: string[]) => void }>(null);
 
@@ -56,7 +56,7 @@ export default function Home() {
       <div>
         <h1>Welcome to React Router!</h1>
         <p>This is a simple audio playback example.</p>
-        <p>5秒後にビープ音が再生されます。</p>
+        <p>{milliseconds} 秒後にビープ音が再生されます。</p>
         <button
           onClick={() => {
             if (audioRef.current) {
