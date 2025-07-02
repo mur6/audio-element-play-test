@@ -1,20 +1,19 @@
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
-const beep = new Audio("/beep.mp3");
+const beep = new Audio("/audio/silent.mp3");
 beep.loop = true;
-beep.volume = 0.5;
 
 type Playlist = string[];
 
-interface SimpleAudioRef {
+interface AutoPlayAudioRef {
   play: (playlist: Playlist) => void;
 }
 
-interface PlaylistProps {
-  ref: React.Ref<SimpleAudioRef>;
+interface AutoPlayAudioProps {
+  ref: React.Ref<AutoPlayAudioRef>;
 }
 
-export function SimpleAudio({ ref }: PlaylistProps) {
+export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useImperativeHandle(ref, () => ({
