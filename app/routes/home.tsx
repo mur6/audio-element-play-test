@@ -31,7 +31,7 @@ export function meta({}: Route.MetaArgs) {
 const playlist = ["/audio/low_beep.mp3", "/audio/high_beep.mp3"];
 
 export default function Home() {
-  const intervals = [5000, 10000, 30000, 60000]; // 5秒、10秒、30秒、60秒
+  const intervals = [0, 5000, 10000, 20000, 30000, 45000];
   const [uiFired, setUiFired] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [currentIntervalIndex, setCurrentIntervalIndex] = useState(0);

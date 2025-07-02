@@ -70,9 +70,19 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current;
+      
+      // 前の再生を停止してからリセット
+      audio.pause();
+      audio.currentTime = 0;
+      
+      // 新しいトラックを設定
       audio.src = currentPlaylist[currentTrackIndex];
       audio.load();
-      audio.play().catch(console.error);
+      
+      //audio.play().catch(console.error);
+      audio.addEventListener("canplaythrough", () => {
+        audio.play().catch(console.error);
+      }, { once: true });
     }
   }, [currentTrackIndex, currentPlaylist]);
 
