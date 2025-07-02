@@ -32,7 +32,7 @@ const playlist = ["/audio/low_beep.mp3", "/audio/high_beep.mp3"];
 
 export default function Home() {
   const intervals = [5000, 10000, 30000, 60000]; // 5秒、10秒、30秒、60秒
-  const [played, setPlayed] = useState(false);
+  const [uiFired, setUiFired] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [currentIntervalIndex, setCurrentIntervalIndex] = useState(0);
   const audioRef = useRef<{ play: (playlist: string[]) => void }>(null);
@@ -43,7 +43,7 @@ export default function Home() {
 
   //ボタンが押されてから段階的にビープを再生（5秒→10秒→30秒→60秒）
   useEffect(() => {
-    if (!played) return;
+    if (!uiFired) return;
 
     const scheduleNextBeep = (intervalIndex: number) => {
       if (intervalIndex >= intervals.length) {
@@ -84,33 +84,35 @@ export default function Home() {
 
     const cleanup = scheduleNextBeep(currentIntervalIndex);
     return cleanup;
-  }, [played, currentIntervalIndex]);
+  }, [uiFired, currentIntervalIndex]);
 
   return (
     <>
       <div>
         <h1>Welcome to React Router!</h1>
         <p>This is a simple audio playback example.</p>
-        {played && countdown > 0 ? (
+        {uiFired && countdown > 0 ? (
           <p>{countdown} 秒後にビープ音が再生されます。</p>
-        ) : played && countdown === 0 ? (
+        ) : uiFired && countdown === 0 ? (
           <p>ビープ音を再生中...</p>
         ) : (
           <p>ボタンを押してビープ音を開始してください。</p>
         )}
         <button
           onClick={() => {
+            setUiFired(true);
             if (audioRef.current) {
               audioRef.current.play(playlist);
             }
-            setPlayed(true);
             setCurrentIntervalIndex(0); // インデックスをリセット
           }}
           style={{ padding: "10px 20px", fontSize: "16px" }}
         >
           Play Beep
         </button>
-        <AutoPlayAudio ref={audioRef} />
+        {!uiFired && (
+          <AutoPlayAudio ref={audioRef} />
+        )}
       </div>
     </>
   );
