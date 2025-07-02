@@ -26,6 +26,6 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   }));
 
   return (
-      <audio ref={audioRef} preload="auto" style={{ display: 'none' }} />
+      <audio ref={audioRef} autoPlay preload="auto" style={{ display: 'none' }} />
   );
 }
