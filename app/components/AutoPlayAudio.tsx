@@ -67,27 +67,6 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
     }
   }, [currentTrackIndex, currentPlaylist]);
 
-  // useEffect(() => {
-  //   const audio = audioRef.current;
-  //   if (!audio) return;
-
-  //   const handleEnded = () => {
-  //     if (isPlayingPlaylist && currentPlaylist.length > 0) {
-  //       const nextIndex = currentTrackIndex + 1;
-  //       if (nextIndex < currentPlaylist.length) {
-  //         setCurrentTrackIndex(nextIndex);
-  //       } else {
-  //         setIsPlayingPlaylist(false);
-  //         setCurrentPlaylist([]);
-  //         setCurrentTrackIndex(0);
-  //       }
-  //     }
-  //   };
-
-  //   audio.addEventListener("ended", handleEnded);
-  //   return () => audio.removeEventListener("ended", handleEnded);
-  // }, [isPlayingPlaylist, currentPlaylist]);
-
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current;
@@ -96,21 +75,6 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
       audio.play().catch(console.error);
     }
   }, [currentTrackIndex, currentPlaylist]);
-
-  // useEffect(() => {
-  //   const audio = audioRef.current;
-  //   if (!audio) return;
-
-  //   if (isPlayingPlaylist && currentPlaylist.length > 0) {
-  //     audio.src = currentPlaylist[currentTrackIndex];
-  //   } else {
-  //     audio.src = SILENT_SOUND_PATH;
-  //     audio.loop = true;
-  //   }
-
-  //   audio.load();
-  //   audio.play().catch(console.error);
-  // }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
 
   return (
     <audio ref={audioRef} autoPlay preload="auto" style={{ display: "none" }} />
