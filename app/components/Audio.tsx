@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-// playlistの型を定義
 
 type Playlist = string[];
 
@@ -10,10 +9,10 @@ interface SimpleAudioRef {
 }
 
 interface PlaylistProps {
-  playlist: Playlist;
+  ref: React.Ref<SimpleAudioRef>;
 }
 
-export function SimpleAudio({ playlist }: PlaylistProps) {
+export function SimpleAudio({ ref }: PlaylistProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
