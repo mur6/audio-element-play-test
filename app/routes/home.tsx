@@ -9,103 +9,67 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-interface FirstPageProps {
-  onClick?: () => void;
-}
-function FirstPage({ onClick }: FirstPageProps) {
-  return (
-    <div>
-      <div
-        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
-      >
-        <button
-          onClick={onClick}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
-          Start beep
-        </button>
-      </div>
-    </div>
-  );
-}
-
-interface SecondPageProps {
-  onPlayPlaylist: (playlist: string[]) => void;
-}
-function SecondPage({ onPlayPlaylist }: SecondPageProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlayBeep = () => {
-    if (!isPlaying) {
-      const playlist = ["/audio/high_beep.mp3", "/audio/low_beep.mp3"];
-      onPlayPlaylist(playlist);
-      setIsPlaying(true);
-    }
-  };
-
-  return (
-    <div>
-      <div
-        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
-      >
-        <h2>Second Page</h2>
-        <p>ビープを再生します。</p>
-        <button 
-          onClick={handlePlayBeep}
-          disabled={isPlaying}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
-          {isPlaying ? "Playing..." : "Play Beep"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ThirdPage() {
-  return (
-    <div>
-      <div
-        style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
-      >
-        <h2>Third Page</h2>
-        <p>5秒後に自動的に切り替わりました。</p>
-      </div>
-    </div>
-  );
-}
+// interface FirstPageProps {
+//   onClick?: () => void;
+// }
+// function FirstPage({ onClick }: FirstPageProps) {
+//   return (
+//     <div>
+//       <div
+//         style={{ padding: "20px", border: "1px solid #ccc", margin: "20px" }}
+//       >
+//         <button
+//           onClick={onClick}
+//           style={{ padding: "10px 20px", fontSize: "16px" }}
+//         >
+//           Start beep
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+const playlist = ["/audio/high_beep.mp3", "/audio/low_beep.mp3"];
 
 export default function Home() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const milliseconds = 5000; // 5 seconds
+  const [played, setPlayed] = useState(false);
   const audioRef = useRef<{ play: (playlist: string[]) => void }>(null);
 
-  const handlePlayPlaylist = (playlist: string[]) => {
-    audioRef.current?.play(playlist);
-  };
+  // const handlePlayPlaylist = (playlist: string[]) => {
+  //   audioRef.current?.play(playlist);
+  // };
 
+  // 一度再生が完了してから、5秒後に、再度ビープを再生
   useEffect(() => {
-    if (currentStep === 1) {
       const timer = setTimeout(() => {
-        setCurrentStep(2);
-        // 5秒後に自動的にビープを再生
-        handlePlayPlaylist(["/audio/high_beep.mp3", "/audio/low_beep.mp3"]);
-      }, 5000);
+        
+        if (audioRef.current) {
+          audioRef.current.play(playlist);
+        }
+      }, milliseconds);
 
       return () => clearTimeout(timer);
-    }
-  }, [currentStep]);
+    }, []);
 
   return (
     <>
-      {currentStep === 0 ? (
-        <FirstPage onClick={() => setCurrentStep(1)} />
-      ) : currentStep === 1 ? (
-        <SecondPage onPlayPlaylist={handlePlayPlaylist} />
-      ) : (
-        <ThirdPage />
-      )}
-      
-      <AutoPlayAudio ref={audioRef} />
+      <div>
+        <h1>Welcome to React Router!</h1>
+        <p>This is a simple audio playback example.</p>
+        <p>5秒後にビープ音が再生されます。</p>
+        <button
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.play(playlist);
+            }
+            setPlayed(true);
+          }}
+          style={{ padding: "10px 20px", fontSize: "16px" }}
+        >
+          Play Beep
+        </button>
+        <AutoPlayAudio ref={audioRef} />
+      </div>
     </>
   );
 }
