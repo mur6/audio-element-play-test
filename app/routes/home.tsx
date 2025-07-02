@@ -110,7 +110,7 @@ export default function Home() {
         >
           Play Beep
         </button>
-        {!uiFired && (
+        {uiFired && (
           <AutoPlayAudio ref={audioRef} />
         )}
       </div>
