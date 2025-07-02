@@ -26,37 +26,6 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   }));
 
   return (
-    <div>
-      <audio ref={audioRef} onEnded={() => beep.play()} />
-      <button
-        onClick={() => {
-          if (audioRef.current) {
-            audioRef.current.play();
-          }
-        }}
-      >
-        Play
-      </button>
-      <button
-        onClick={() => {
-          if (audioRef.current) {
-            audioRef.current.pause();
-          }
-          beep.pause();
-        }
-      }>
-        Pause
-      </button>
-      <button
-        onClick={() => {
-          if (audioRef.current) {
-            audioRef.current.currentTime = 0;
-          }
-          beep.currentTime = 0;
-        }
-      }>
-        Reset
-      </button>
-    </div>
+      <audio ref={audioRef} preload="auto" style={{ display: 'none' }} />
   );
 }
