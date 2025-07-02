@@ -1,5 +1,8 @@
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
+const beep = new Audio("/beep.mp3");
+beep.loop = true;
+beep.volume = 0.5;
 
 type Playlist = string[];
 
@@ -23,5 +26,38 @@ export function SimpleAudio({ ref }: PlaylistProps) {
     },
   }));
 
-  return <audio autoPlay controls ref={audioRef} style={{ display: "none" }} />;
+  return (
+    <div>
+      <audio ref={audioRef} onEnded={() => beep.play()} />
+      <button
+        onClick={() => {
+          if (audioRef.current) {
+            audioRef.current.play();
+          }
+        }}
+      >
+        Play
+      </button>
+      <button
+        onClick={() => {
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
+          beep.pause();
+        }
+      }>
+        Pause
+      </button>
+      <button
+        onClick={() => {
+          if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+          }
+          beep.currentTime = 0;
+        }
+      }>
+        Reset
+      </button>
+    </div>
+  );
 }
