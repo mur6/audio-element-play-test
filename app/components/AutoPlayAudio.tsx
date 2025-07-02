@@ -49,7 +49,7 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
           // Uncomment the next line if you want to pause at the end of the playlist
           // audio.pause()
           // audio.currentTime = 0
-          audio.src = HIGH_BEEP_SOUND_PATH;
+          audio.src = SILENT_SOUND_PATH;
           audio.loop = true;
           // audio.volume = 0.1; // Set volume to a low level
           audio.load();

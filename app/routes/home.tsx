@@ -31,7 +31,7 @@ export function meta({}: Route.MetaArgs) {
 const playlist = ["/audio/low_beep.mp3", "/audio/high_beep.mp3"];
 
 export default function Home() {
-  const milliseconds = 5000; // 5 seconds
+  const milliseconds = 15000; // 5 seconds
   const [played, setPlayed] = useState(false);
   const audioRef = useRef<{ play: (playlist: string[]) => void }>(null);
 
