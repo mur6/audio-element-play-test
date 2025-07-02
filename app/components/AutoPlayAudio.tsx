@@ -13,6 +13,13 @@ interface AutoPlayAudioProps {
   ref: React.Ref<AutoPlayAudioRef>;
 }
 
+function initAudioElemAttributes(audio: HTMLAudioElement) {
+  audio.pause();
+  audio.src = "";
+  audio.currentTime = 0;
+  audio.loop = false;
+}
+
 export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [currentPlaylist, setCurrentPlaylist] = useState<Playlist>([]);
@@ -22,11 +29,7 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
     play: (playlist: Playlist) => {
       // stop current audio loop
       if (audioRef.current) {
-        audioRef.current.pause();
-        // clear the source to stop any current playback
-        audioRef.current.src = "";
-        audioRef.current.currentTime = 0;
-        audioRef.current.loop = false;
+        initAudioElemAttributes(audioRef.current);
       }
       setCurrentPlaylist(playlist);
       setCurrentTrackIndex(0);
