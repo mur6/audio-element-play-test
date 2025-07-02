@@ -1,6 +1,7 @@
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 const SILENT_SOUND_PATH = "/audio/silent.mp3";
+const HIGH_BEEP_SOUND_PATH = "/audio/high_beep.mp3";
 
 type Playlist = string[];
 
@@ -19,6 +20,14 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
 
   useImperativeHandle(ref, () => ({
     play: (playlist: Playlist) => {
+      // stop current audio loop
+      if (audioRef.current) {
+        audioRef.current.pause();
+        // clear the source to stop any current playback
+        audioRef.current.src = "";
+        audioRef.current.currentTime = 0;
+        audioRef.current.loop = false;
+      }
       setCurrentPlaylist(playlist);
       setCurrentTrackIndex(0);
     },
@@ -37,6 +46,11 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
           // Uncomment the next line if you want to pause at the end of the playlist
           // audio.pause()
           // audio.currentTime = 0
+          audio.src = HIGH_BEEP_SOUND_PATH;
+          audio.loop = true;
+          // audio.volume = 0.1; // Set volume to a low level
+          audio.load();
+          audio.play().catch(console.error);
         }
       };
 
@@ -71,15 +85,15 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   //   return () => audio.removeEventListener("ended", handleEnded);
   // }, [isPlayingPlaylist, currentPlaylist]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (audioRef.current) {
-      const audio = audioRef.current
-      audio.src = currentPlaylist[currentTrackIndex]
-      audio.load()
-      audio.play()
+      const audio = audioRef.current;
+      audio.src = currentPlaylist[currentTrackIndex];
+      audio.load();
+      audio.play();
     }
-  }, [currentTrackIndex, currentPlaylist])
-  
+  }, [currentTrackIndex, currentPlaylist]);
+
   // useEffect(() => {
   //   const audio = audioRef.current;
   //   if (!audio) return;
