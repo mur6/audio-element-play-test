@@ -93,7 +93,7 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
       const audio = audioRef.current;
       audio.src = currentPlaylist[currentTrackIndex];
       audio.load();
-      audio.play();
+      audio.play().catch(console.error);
     }
   }, [currentTrackIndex, currentPlaylist]);
 
