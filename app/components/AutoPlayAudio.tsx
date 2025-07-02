@@ -27,7 +27,6 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
 
   useImperativeHandle(ref, () => ({
     play: (playlist: Playlist) => {
-      // stop current audio loop
       if (audioRef.current) {
         initAudioElemAttributes(audioRef.current);
       }
@@ -44,14 +43,8 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
         if (currentTrackIndex + 1 < currentPlaylist.length) {
           setCurrentTrackIndex(currentTrackIndex + 1);
         } else {
-          // Uncomment this block if you want to loop the playlist
-          // setCurrentIndex(0)
-          // Uncomment the next line if you want to pause at the end of the playlist
-          // audio.pause()
-          // audio.currentTime = 0
           audio.src = SILENT_SOUND_PATH;
           audio.loop = true;
-          // audio.volume = 0.1; // Set volume to a low level
           audio.load();
           audio.play().catch(console.error);
         }
@@ -71,15 +64,12 @@ export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
     if (audioRef.current) {
       const audio = audioRef.current;
       
-      // 前の再生を停止してからリセット
       audio.pause();
       audio.currentTime = 0;
       
-      // 新しいトラックを設定
       audio.src = currentPlaylist[currentTrackIndex];
       audio.load();
-      
-      //audio.play().catch(console.error);
+
       audio.addEventListener("canplaythrough", () => {
         audio.play().catch(console.error);
       }, { once: true });
