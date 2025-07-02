@@ -14,13 +14,61 @@ interface AutoPlayAudioProps {
 
 export function AutoPlayAudio({ ref }: AutoPlayAudioProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [currentPlaylist, setCurrentPlaylist] = useState<Playlist>([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [isPlayingPlaylist, setIsPlayingPlaylist] = useState(false);
 
-  // TODO:
-  // - このコンポーネントは、生成されたタイミングから、常にSILENT_SOUND_PATHのサウンドを再生し続ける。
-  // - ただし、`ref`を通じて、外部から `playlist` (音声ファイルのリスト)が与えられたら、その音声ファイルを、リスト順に再生する。
-  // - `ref`を通じて、`play`メソッドを公開する。
-  // - `play`メソッドは、引数として受け取った `playlist` の音声ファイルを順番に再生する。
-  // - `playlist`の再生が終了したら、再びSILENT_SOUND_PATHの音声を再生する。
+  useImperativeHandle(ref, () => ({
+    play: (playlist: Playlist) => {
+      setCurrentPlaylist(playlist);
+      setCurrentTrackIndex(0);
+      setIsPlayingPlaylist(true);
+    }
+  }));
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      if (isPlayingPlaylist && currentPlaylist.length > 0) {
+        const nextIndex = currentTrackIndex + 1;
+        if (nextIndex < currentPlaylist.length) {
+          setCurrentTrackIndex(nextIndex);
+        } else {
+          setIsPlayingPlaylist(false);
+          setCurrentPlaylist([]);
+          setCurrentTrackIndex(0);
+        }
+      }
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    return () => audio.removeEventListener('ended', handleEnded);
+  }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlayingPlaylist && currentPlaylist.length > 0) {
+      audio.src = currentPlaylist[currentTrackIndex];
+    } else {
+      audio.src = SILENT_SOUND_PATH;
+    }
+    
+    audio.load();
+    audio.play().catch(console.error);
+  }, [isPlayingPlaylist, currentPlaylist, currentTrackIndex]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.src = SILENT_SOUND_PATH;
+    audio.loop = true;
+    audio.play().catch(console.error);
+  }, []);
 
   return (
       <audio ref={audioRef} autoPlay preload="auto" style={{ display: 'none' }} />

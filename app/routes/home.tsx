@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
-import { useState, useEffect, use } from "react";
-import { SimpleAudio } from "../components/Audio";
+import { useState, useEffect, useRef } from "react";
+import { AutoPlayAudio } from "../components/AutoPlayAudio";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -30,9 +30,19 @@ function FirstPage({ onClick }: FirstPageProps) {
 }
 
 interface SecondPageProps {
-  playlist: string[];
+  onPlayPlaylist: (playlist: string[]) => void;
 }
-function SecondPage({ playlist }: SecondPageProps) {
+function SecondPage({ onPlayPlaylist }: SecondPageProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayBeep = () => {
+    if (!isPlaying) {
+      const playlist = ["/audio/high_beep.mp3", "/audio/low_beep.mp3"];
+      onPlayPlaylist(playlist);
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <div>
       <div
@@ -40,16 +50,19 @@ function SecondPage({ playlist }: SecondPageProps) {
       >
         <h2>Second Page</h2>
         <p>ビープを再生します。</p>
-        <SimpleAudio playlist={playlist} />
+        <button 
+          onClick={handlePlayBeep}
+          disabled={isPlaying}
+          style={{ padding: "10px 20px", fontSize: "16px" }}
+        >
+          {isPlaying ? "Playing..." : "Play Beep"}
+        </button>
       </div>
     </div>
   );
 }
 
-interface ThirdPageProps {
-  playlist: string[];
-}
-function ThirdPage({ playlist }: ThirdPageProps) {
+function ThirdPage() {
   return (
     <div>
       <div
@@ -57,54 +70,42 @@ function ThirdPage({ playlist }: ThirdPageProps) {
       >
         <h2>Third Page</h2>
         <p>5秒後に自動的に切り替わりました。</p>
-        <SimpleAudio playlist={playlist} />
       </div>
     </div>
   );
 }
 
 export default function Home() {
-  // const [currentPlaylist, setCurrentPlaylist] = useState(-1);
   const [currentStep, setCurrentStep] = useState(0);
-  const [currentPlaylist, setCurrentPlaylist] = useState<string[]>([]);
-  const testPlaylistOfList: string[][] = [
-    ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
-    ["/audio/high_beep.mp3", "/audio/low_beep.mp3"],
-  ];
-  const playlist = testPlaylistOfList[0];
-  const playlist2 = testPlaylistOfList[1];
-  const silentPlaylist = ["/audio/silent.mp3"];
+  const audioRef = useRef<{ play: (playlist: string[]) => void }>(null);
+
+  const handlePlayPlaylist = (playlist: string[]) => {
+    audioRef.current?.play(playlist);
+  };
 
   useEffect(() => {
-    if (currentStep === 0) {
-      setCurrentPlaylist([]);
-    } else if (currentStep === 1) {
-      // 5秒間無音のmp3を再生
-      setCurrentPlaylist(silentPlaylist);
-      
+    if (currentStep === 1) {
       const timer = setTimeout(() => {
         setCurrentStep(2);
-      }, 5000); // 5秒後に自動的に切り替え
+        // 5秒後に自動的にビープを再生
+        handlePlayPlaylist(["/audio/high_beep.mp3", "/audio/low_beep.mp3"]);
+      }, 5000);
 
       return () => clearTimeout(timer);
-    } else if (currentStep === 2) {
-      setCurrentPlaylist(playlist2);
     }
   }, [currentStep]);
+
   return (
     <>
       {currentStep === 0 ? (
         <FirstPage onClick={() => setCurrentStep(1)} />
       ) : currentStep === 1 ? (
-        <SecondPage playlist={playlist}/>
+        <SecondPage onPlayPlaylist={handlePlayPlaylist} />
       ) : (
-        <ThirdPage playlist={playlist2} />
+        <ThirdPage />
       )}
       
-      {/* 常に同じSimpleAudioコンポーネントを維持 */}
-      {currentPlaylist.length > 0 && (
-        <SimpleAudio key="main-audio" playlist={currentPlaylist} />
-      )}
+      <AutoPlayAudio ref={audioRef} />
     </>
   );
 }
